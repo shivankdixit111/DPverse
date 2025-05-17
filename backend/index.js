@@ -10,9 +10,10 @@ dotenv.config();
 console.log('frontend url ', process.env.FRONTEND_URL)
 
 const corsOptions = {
-    origin: process.env.FRONTEND_URL,
+    // origin: process.env.FRONTEND_URL,
+    origin: '*',
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-    credentials: true
+    // credentials: true 
 }
 app.use(cors(corsOptions));
 app.use(express.json()); //parse the req.body data in json format
