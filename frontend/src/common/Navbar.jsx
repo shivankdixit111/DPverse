@@ -6,7 +6,7 @@ import { auth, googleProvider } from '../firebase';
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
-import LoginPage from './loginPage';
+import LoginPage from './LoginPage';
 import SignUp from './SignUp';
 import toast, { Toaster } from 'react-hot-toast';
 

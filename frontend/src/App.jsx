@@ -7,7 +7,7 @@ import WhyChoseUs from './components/WhyChoseUs'
 import Navbar from './common/Navbar' 
 import Profile from './components/Profile'
 import NewProblem from './components/NewProblem'
-import LoginPage from './common/loginPage'
+import LoginPage from './common/LoginPage'
 import { Toaster } from 'react-hot-toast'
 
 const App = () => {

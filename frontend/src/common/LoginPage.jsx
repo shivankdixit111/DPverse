@@ -1,5 +1,4 @@
-// LoginPage.jsx
-import { signInWithPopup } from 'firebase/auth';
+// LoginPage.jsx 
 import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { auth, googleProvider } from '../firebase';
