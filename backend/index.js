@@ -7,6 +7,8 @@ const authRoute = require('./routes/auth.route')
 const problemRoute = require('./routes/problem.route')
 dotenv.config();
 
+console.log('frontend url ', process.env.FRONTEND_URL)
+
 const corsOptions = {
     origin: process.env.FRONTEND_URL,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
