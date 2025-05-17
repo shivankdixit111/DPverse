@@ -1,10 +1,10 @@
 const express = require('express');
-const connectToDB = require('./db/db');
+const connectToDB = require('../db/db');
 const app = express();
 const dotenv = require('dotenv')
 const cors = require('cors'); 
-const authRoute = require('./routes/auth.route')
-const problemRoute = require('./routes/problem.route')
+const authRoute = require('../routes/auth.route')
+const problemRoute = require('../routes/problem.route')
 dotenv.config();
 
 console.log('frontend url ', process.env.FRONTEND_URL)
