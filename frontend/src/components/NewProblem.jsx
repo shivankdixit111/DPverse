@@ -90,7 +90,7 @@ const NewProblem = () => {
                 className='border-black border-2 rounded-lg p-3 bg-white text-black focus:ring-2 focus:ring-yellow-500' 
                 type="text" 
                 name='platform' 
-                placeholder='https://example.com/problem'
+                placeholder='LeetCode / GeeksForGeeks'
                 required
               />
             </div>

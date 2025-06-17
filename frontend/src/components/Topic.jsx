@@ -8,8 +8,12 @@ import ytIcon  from '../images/ytIcon.png'
 import documentIcon  from '../images/documentIcon.png'
 
 const platforms = {
+      'leetcode': leetcodeIcon,
       'Leetcode': leetcodeIcon,
+      'LeetCode': leetcodeIcon,
       'GeeksForGeeks': gfgIcon, 
+      'GFG': gfgIcon, 
+      'gfg': gfgIcon, 
 }
 
 const Topic = (props) => {
