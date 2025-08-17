@@ -85,14 +85,17 @@ const NewProblem = () => {
 
             <div className='flex flex-col'>
               <label htmlFor="platform" className='font-bold text-black mb-2'>Platform</label>
-              <input 
-                onChange={handleChange} 
-                className='border-black border-2 rounded-lg p-3 bg-white text-black focus:ring-2 focus:ring-yellow-500' 
-                type="text" 
-                name='platform' 
-                placeholder='LeetCode / GeeksForGeeks'
-                required
-              />
+              <select
+                  name='platform'
+                  onChange={handleChange}
+                  defaultValue=""
+                  className='border-black border-2 rounded-lg p-3 bg-white text-black focus:ring-2 focus:ring-yellow-500'
+                  required 
+              >
+                 <option value="" selected disabled>Select the coding platform</option>
+                 <option value="LeetCode">LeetCode</option>
+                 <option value="GeeksForGeeks">GeeksForGeeks</option>
+              </select> 
             </div>
 
             <div className='flex flex-col'>
