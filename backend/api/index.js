@@ -1,19 +1,20 @@
 const express = require('express');
+const path = require('path')
 const connectToDB = require('../db/db');
 const app = express();
 const dotenv = require('dotenv')
 const cors = require('cors'); 
 const authRoute = require('../routes/auth.route')
 const problemRoute = require('../routes/problem.route')
-dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 console.log('frontend url ', process.env.FRONTEND_URL)
 
 const corsOptions = {
-    // origin: process.env.FRONTEND_URL,
+    origin: process.env.FRONTEND_URL,
     origin: '*',
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-    // credentials: true 
+    credentials: true 
 }
 app.use(cors(corsOptions));
 app.use(express.json()); //parse the req.body data in json format
