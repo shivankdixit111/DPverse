@@ -86,7 +86,7 @@ const SignUp = (props) => {
         </div>
 
         <select name='graduationYear' className="border p-2 rounded w-[90%]  mb-2" onChange={handleInput}>
-            <option className='text-gray-500' selected disabled>Choose your graduation graduationYear</option>
+            <option className='text-gray-500' selected disabled>Choose your graduation year</option>
             {years.map((y, idx)=> (
             <option key={idx} value={y}>{y}</option>
             ))}
