@@ -113,6 +113,19 @@ const Topic = (props) => {
 
                 <td className='py-2 border border-gray-700'>{p.problem.name}</td>
 
+             <td className='py-2 border border-gray-700'>
+                <Link 
+                    to={p.problem.practiceLink}  
+                    className='flex justify-center items-center hover:scale-110 transition-transform'
+                >
+                    {p.problem.platform.toLowerCase() === "leetcode" ? (
+                    <img className='h-8 w-8' src={platforms.LeetCode} alt="LeetCode" />
+                    ) : (
+                    <img className='h-8 w-8' src={platforms.GeeksForGeeks} alt="GFG" />
+                    )}
+                </Link>
+            </td>
+
                 <td className='py-2 border border-gray-700 flex justify-center gap-3 items-center'>
                     {/* Resource Document */}
                     <Link
@@ -134,7 +147,7 @@ const Topic = (props) => {
                         </Link>
                     )}
                 </td> 
-                
+
                 <td className='py-2 border border-gray-700'>
                   <span className={difficultyStyle(p.problem.difficulty)}>
                     {p.problem.difficulty}
