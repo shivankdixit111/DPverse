@@ -8,5 +8,6 @@ router.post('/get-all-problems', combinedAuthMiddleware, problemController.getAl
 router.get('/get-all-problems2', combinedAuthMiddleware, problemController.getAllProblems2)
 router.post('/update', combinedAuthMiddleware, problemController.updateProblem)
 router.get('/leaderboard', problemController.displayLeaderBoard)
+router.post('/get', problemController.getAIAnswer)
 
 module.exports = router;

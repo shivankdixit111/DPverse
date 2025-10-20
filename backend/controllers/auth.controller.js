@@ -15,9 +15,7 @@ const signup = async(req, res)=> {
 
     const newUser = await User.create({ name, email, password: hashed_password, graduationYear})
 
-    return res.status(200).json(newUser);
-
-    return res.status(200).json("Ok")
+    return res.status(200).json(newUser); 
   } catch(error) {
     return res.status(400).json({message: "Internal server error in signup !!!"})
   }

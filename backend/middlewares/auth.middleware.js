@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user.model');
 
 const combinedAuthMiddleware = async(req, res, next)=> {
-      const token = req.headers.authorization;
+      const token = req.headers.authorization; 
       if(!token) {
         return res.status(400).json({message: "Unauthorized! Please try again later."})
       }
@@ -25,6 +25,7 @@ const combinedAuthMiddleware = async(req, res, next)=> {
             req.authType = 'jwt'
             return next();
           } catch(error) {
+              console.log(error)
               return res.status(400).json({message: "Internal server error in verification"})
           } 
       } 

@@ -1,5 +1,9 @@
+const { text } = require("express");
 const Problem = require("../models/problem.mode");
 const User = require("../models/user.model");
+const { getLLMAnswer } = require("../services/langchain");
+const { getScrappedData } = require('../services/scraper')
+const cheerio = require('cheerio')
 
 const createProblem = async(req, res)=>{
    try{
@@ -126,6 +130,41 @@ const getAllProblems2 = async(req, res)=>{
     } catch(error) {
       console.log(error)
     }
- }
+}
 
-module.exports = { createProblem, getAllProblems, getAllProblems2, updateProblem, displayLeaderBoard };
+let storedProblem = "";
+const getAIAnswer = async(req, res)=>{
+   try {
+      const {url, query} = req.body;
+      const slug = url.split("/")[4];
+      storedProblem = slug;
+      console.log('url is ', url)
+      // console.log("slug is ", slug)
+      let aiResponse = "";
+     
+      // if(storedProblem == "") {
+         const problemStatement = await getScrappedData(slug);
+         const title = problemStatement.data.question.title;
+         const html = problemStatement.data.question.content;
+         const d = cheerio.load(html)
+         // console.log('d is ', d)
+         const textContent = d.text().trim();
+         //   console.log('title is ', title, 'problem statement is - ', textContent)
+         // aiResponse   = await getLLMAnswer(problemStatement); 
+      // }  
+
+      // console.log('problem name is ', textContent)
+
+      aiResponse  = await getLLMAnswer({question : textContent, query}); 
+
+      console.log('AI Response is ------------- ', aiResponse)
+
+      return res.status(200).json(aiResponse)
+      
+   } catch(error) {
+      console.log(error)
+      return res.status(400).json({message: "Error in AI Response of the question"})
+   }
+}
+
+module.exports = { createProblem, getAllProblems, getAllProblems2, updateProblem, displayLeaderBoard, getAIAnswer };
