@@ -21,6 +21,7 @@ const createProblem = async(req, res)=>{
       const newProblem = await Problem.create({form, name, practiceLink, platform, resourceLink, videoLink, difficulty})
       return res.status(200).json(newProblem)
    } catch(error) {
+      console.log(error)
       return res.status(400).json({message: "Internal server error"})
    }
 }

@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react' 
 import { userDataContext } from '../store/UserContext';
 
-const forms =  ["DP on Index", "DP on Subsequences", "Bitmask DP", "Range DP", "Digit DP", "DP on Grids", "DP on Tree/Graph", "DP on Trie", "Backtrack & Print"]
+const forms = ["DP on Index", "DP on Subsequences", "Bitmask DP", "Range DP", "Digit DP", "Game DP", "DP on Grids", "Re-rooting Tree DP", "DP on Trie", "Backtrack & Print"];
 
 const NewProblem = () => {
     const {token} = useContext(userDataContext);   
