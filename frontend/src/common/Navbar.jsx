@@ -11,8 +11,6 @@ import LoginPage from './LoginPage';
 import SignUp from './SignUp';
 import toast from 'react-hot-toast';
 
-// Sign in 
-
 let navigation = [
   { name: 'Home', href: '/', current: true },
   { name: 'Topics', href: '/topics', current: false },
@@ -39,10 +37,7 @@ const Navbar = () => {
 
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/user/google-login`, {
         method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': tokenId,
-        },
+        headers: { 'Content-Type': 'application/json', 'Authorization': tokenId },
         body: JSON.stringify(body),
       });
 
@@ -70,97 +65,121 @@ const Navbar = () => {
 
   // Glassy modal
   const Modal = ({ isOpen, onClose, children }) => {
-  if (!isOpen) return null;
-  return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-50 backdrop-blur-sm">
-      <div className={`bg-gray-900/70 backdrop-blur-xl p-6 ${mode === 'signup' ? 'h-[90%]' : 'h-[80%]'} 
-        rounded-3xl shadow-2xl min-w-[450px] relative border border-purple-500 text-white`}
-      >
-        {/* Close Button */}
-        <button 
-          onClick={onClose} 
-          className="absolute top-3 right-4 text-gray-300 hover:text-yellow-400 text-2xl font-bold cursor-pointer"
+    if (!isOpen) return null;
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-50 backdrop-blur-sm">
+        <div className={`bg-gray-900/70 backdrop-blur-xl p-6 ${mode === 'signup' ? 'h-[90%]' : 'h-[80%]'} 
+          rounded-3xl shadow-2xl min-w-[90%] md:min-w-[450px] relative border border-purple-500 text-white overflow-y-auto`}
         >
-          &times;
-        </button>
+          {/* Close Button */}
+          <button 
+            onClick={onClose} 
+            className="absolute top-3 right-4 text-gray-300 hover:text-yellow-400 text-2xl font-bold cursor-pointer"
+          >
+            &times;
+          </button>
 
-        <div className="text-center text-white">
-          {children}
+          <div className="text-center text-white">
+            {children}
+          </div>
         </div>
       </div>
-    </div>
-  );
-};
+    );
+  };
 
   return (
     <>
       <Disclosure as="nav" className="bg-gray-900/90 backdrop-blur-md shadow-md sticky top-0 z-50">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="relative flex h-16 items-center justify-between">
-            <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-              <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-300 hover:text-white hover:bg-gradient-to-r from-purple-600 to-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-white">
-                <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
-                <XMarkIcon className="hidden h-6 w-6" aria-hidden="true" />
-              </Disclosure.Button>
-            </div>
+        {({ open }) => (
+          <>
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              <div className="relative flex h-16 items-center justify-between">
+                {/* Mobile menu button */}
+                <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
+                  <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-300 hover:text-white hover:bg-gradient-to-r from-purple-600 to-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-white">
+                    {open ? <XMarkIcon className="block h-6 w-6" /> : <Bars3Icon className="block h-6 w-6" />}
+                  </Disclosure.Button>
+                </div>
 
-            <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-              <div className="flex space-x-4">
-                {navigation.map((item) => (
-                  <Link
-                    key={item.name}
-                    to={item.href}
-                    className={classNames(
-                      item.current
-                        ? 'bg-gradient-to-r from-purple-600 to-indigo-500 text-white'
-                        : 'text-gray-300 hover:bg-gradient-to-r hover:from-purple-600 hover:to-indigo-500 hover:text-white',
-                      'rounded-md px-3 py-2 text-sm font-medium transition duration-300'
-                    )}
-                  >
-                    {item.name}
-                  </Link>
-                ))}
+                {/* Desktop Menu */}
+                <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+                  <div className="hidden sm:flex sm:space-x-4">
+                    {navigation.map((item) => (
+                      <Link
+                        key={item.name}
+                        to={item.href}
+                        className={classNames(
+                          item.current
+                            ? 'bg-gradient-to-r from-purple-600 to-indigo-500 text-white'
+                            : 'text-gray-300 hover:bg-gradient-to-r hover:from-purple-600 hover:to-indigo-500 hover:text-white',
+                          'rounded-md px-3 py-2 text-sm font-medium transition duration-300'
+                        )}
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+
+                {/* User/Login */}
+                <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                  {isLoggedIn ? (
+                    <Menu as="div" className="relative ml-3">
+                      <Menu.Button className="flex rounded-full bg-gradient-to-r from-purple-700 to-indigo-600 text-white h-10 w-10 items-center justify-center font-bold">{nameFirstLetter}</Menu.Button>
+                      <Menu.Items className="absolute right-0 mt-2 w-48 rounded-2xl bg-gray-800/90 backdrop-blur-md shadow-xl border border-purple-400 py-1">
+                        <Menu.Item>
+                          {({ active }) => (
+                            <Link
+                              to="/profile"
+                              className={`block px-4 py-2 text-sm text-white ${active && 'bg-gradient-to-r from-purple-600 to-indigo-500'}`}
+                            >
+                              Profile
+                            </Link>
+                          )}
+                        </Menu.Item>
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              onClick={logOut}
+                              className={`w-full text-left block px-4 py-2 text-sm text-white ${active && 'bg-gradient-to-r from-purple-600 to-indigo-500'}`}
+                            >
+                              Sign out
+                            </button>
+                          )}
+                        </Menu.Item>
+                      </Menu.Items>
+                    </Menu>
+                  ) : (
+                    <button
+                      onClick={() => setIsModalOpen(true)}
+                      className="bg-gradient-to-r from-purple-600 to-indigo-500 hover:from-pink-500 hover:to-red-500 text-white px-4 py-2 rounded-full font-semibold shadow-lg transition transform duration-300"
+                    >
+                      Login
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
 
-            <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-              {isLoggedIn ? (
-                <Menu as="div" className="relative ml-3">
-                  <Menu.Button className="flex rounded-full bg-gradient-to-r from-purple-700 to-indigo-600 text-white h-10 w-10 items-center justify-center font-bold">{nameFirstLetter}</Menu.Button>
-                  <Menu.Items className="absolute right-0 mt-2 w-48 rounded-2xl bg-gray-800/90 backdrop-blur-md shadow-xl border border-purple-400 py-1">
-                    <Menu.Item>
-                      {({ active }) => (
-                        <Link
-                          to="/profile"
-                          className={`block px-4 py-2 text-sm text-white ${active && 'bg-gradient-to-r from-purple-600 to-indigo-500'}`}
-                        >
-                          Profile
-                        </Link>
-                      )}
-                    </Menu.Item>
-                    <Menu.Item>
-                      {({ active }) => (
-                        <button
-                          onClick={logOut}
-                          className={`w-full text-left block px-4 py-2 text-sm text-white ${active && 'bg-gradient-to-r from-purple-600 to-indigo-500'}`}
-                        >
-                          Sign out
-                        </button>
-                      )}
-                    </Menu.Item>
-                  </Menu.Items>
-                </Menu>
-              ) : (
-                <button
-                  onClick={() => setIsModalOpen(true)}
-                  className="bg-gradient-to-r from-purple-600 to-indigo-500 hover:from-pink-500 hover:to-red-500 text-white px-4 py-2 rounded-full font-semibold shadow-lg transition transform duration-300"
+            {/* Mobile Menu Panel */}
+            <Disclosure.Panel className="sm:hidden bg-gray-900/95 backdrop-blur-md p-4 space-y-2">
+              {navigation.map((item) => (
+                <Link
+                  key={item.name}
+                  to={item.href}
+                  className={classNames(
+                    item.current
+                      ? 'bg-gradient-to-r from-purple-600 to-indigo-500 text-white'
+                      : 'text-gray-300 hover:bg-gradient-to-r hover:from-purple-600 hover:to-indigo-500 hover:text-white',
+                    'block rounded-md px-3 py-2 text-base font-medium transition'
+                  )}
                 >
-                  Login
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
+                  {item.name}
+                </Link>
+              ))}
+            </Disclosure.Panel>
+          </>
+        )}
       </Disclosure>
 
       <Modal
@@ -179,7 +198,7 @@ const Navbar = () => {
             className="flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow hover:bg-gray-100 transition cursor-pointer"
           >
             <FcGoogle className="text-xl" />
-            <span className="font-medium text-gray-800">  Sign in with Google</span>
+            <span className="font-medium text-gray-800">Sign in with Google</span>
           </button>
         </div>
       </Modal>

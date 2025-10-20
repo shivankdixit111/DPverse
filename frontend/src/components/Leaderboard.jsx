@@ -44,31 +44,35 @@ const Leaderboard = () => {
 
   return (
     <div className='min-h-screen bg-gray-900 p-4 pt-20'>
-      <h1 className='text-3xl md:text-4xl font-extrabold text-center text-white mb-6'>
+      <h1 className='text-3xl md:text-4xl font-extrabold text-center text-white mb-8'>
         🏆 Leaderboard
       </h1>
 
-      <table className='w-[90%] mx-auto rounded-lg overflow-hidden shadow-lg'>
-        <thead>
-          <tr className='bg-gradient-to-r from-purple-700 via-indigo-600 to-blue-500 text-white text-lg'>
-            <th className='py-3 px-4'><div className='flex items-center justify-center gap-2'><GiAchievement /> Rank</div></th>
-            <th className='py-3 px-4'><div className='flex items-center justify-center gap-2'><FaRegCircleUser /> Username</div></th>
-            <th className='py-3 px-4'><div className='flex items-center justify-center gap-2'><SiThunderstore /> Problems Solved</div></th>
-          </tr>
-        </thead>
-        <tbody>
+      <div className='w-[95%] md:w-[80%] mx-auto bg-gray-800 rounded-2xl shadow-xl overflow-hidden'>
+        <div className='grid grid-cols-3 gap-0 bg-gradient-to-r from-purple-700 via-indigo-600 to-blue-500 text-white text-lg font-semibold text-center py-3'>
+          <div className='flex justify-center items-center gap-2'><GiAchievement /> Rank</div>
+          <div className='flex justify-center items-center gap-2'><FaRegCircleUser /> Username</div>
+          <div className='flex justify-center items-center gap-2'><SiThunderstore /> Problems Solved</div>
+        </div>
+
+        <div>
           {currentUsers.map((user, idx) => (
-            <tr key={idx} className='bg-gray-800 text-gray-100 text-center hover:bg-gradient-to-r hover:from-purple-600 hover:via-indigo-500 hover:to-blue-500 transition-colors cursor-pointer'>
-              <td className='py-2 px-4 font-semibold'>{user.rank}</td>
-              <td className='py-2 px-4'>{user.name}</td>
-              <td className='py-2 px-4'>{user.problemsSolvedCount}</td>
-            </tr>
+            <div 
+              key={idx} 
+              className={`grid grid-cols-3 text-center py-4 md:py-5 px-4 md:px-6 text-white transition-all rounded-lg mx-2 my-2 
+                ${idx % 2 === 0 ? 'bg-gray-700/80' : 'bg-gray-700/60'} 
+                hover:bg-gradient-to-r hover:from-purple-600 hover:via-indigo-500 hover:to-blue-500 hover:scale-105 shadow-md cursor-pointer`}
+            >
+              <div className='font-semibold flex justify-center items-center'>{user.rank}</div>
+              <div className='flex justify-center items-center'>{user.name}</div>
+              <div className='flex justify-center items-center'>{user.problemsSolvedCount}</div>
+            </div>
           ))}
-        </tbody>
-      </table>
+        </div>
+      </div>
 
       {/* Pagination */}
-      <div className='flex items-center justify-center gap-2 mt-6'>
+      <div className='flex items-center justify-center gap-2 mt-8'>
         <button 
           onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
           disabled={currentPage === 1}
