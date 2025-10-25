@@ -1,7 +1,11 @@
+const { razorpayInstance } = require('../lib/razorpay');
 const Problem = require('../models/problem.mode');
 const User = require('../models/user.model')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const crypto = require('crypto')
+const dotenv = require('dotenv')
+dotenv.config();
 
 const signup = async(req, res)=> {
   try{
@@ -89,6 +93,66 @@ const getProfile = async(req, res)=> {
       return res.status(400).json({message: "Internal server error in fetching profile !!!"})
     }
 }
- 
 
-module.exports = {googleLogin, getProfile, login, signup}
+
+const updateToken = async(req, res)=> {
+  try{
+    const {email, creditBalance} = req.body;
+    const userExist = await User.findOne({email})
+    if(!userExist) { 
+      return res.status(400).json({message: "Invalid credentials!"});
+    }
+    
+    await User.updateOne({email}, {creditBalance: Math.max(0,creditBalance)});
+    return res.status(200).json({message: "Token updated successfully!"});
+  } catch(error) {
+    return res.status(400).json({message: "Internal server error in updating token !!!"})
+  }
+}
+
+const makePayment = async(req, res)=> {
+    try {
+      const {amount, tokens} = req.body;
+
+      console.log('tokens is ', tokens)
+
+      const options = {
+        amount: amount*100, //convert to paise
+        currency: "INR",  
+      }
+      
+      const order = await razorpayInstance.orders.create(options)
+      console.log(order)
+      return res.status(200).json(order)
+    } catch(error) {
+      console.log('error from payment =====  ', error)
+        return res.status(400).json({message: "Server Error! Try again later"})
+    }
+};
+
+const verifyPayment = async(req, res)=> {
+    try {
+      const { razorpay_order_id, razorpay_payment_id, razorpay_signature, email, tokens } = req.body; 
+
+      const sign = razorpay_order_id + "|" + razorpay_payment_id;
+
+      const expectedSign = crypto.createHmac("sha256", process.env.RAZORPAY_KEY_SECRET).update(sign).digest('hex')
+
+      console.log(razorpay_order_id, razorpay_payment_id, razorpay_signature, email, tokens, "expected---- ", expectedSign)
+
+      if(expectedSign == razorpay_signature) {
+        const user = await User.updateOne({email}, {$inc: {creditBalance: tokens}}, {new: true});
+        console.log('user is ', user)
+        return res.status(200).json("Payment is successful !")
+      } 
+      
+      return res.status(400).json("Payment is unsuccessful! Try again later"); 
+
+    } catch(error) {
+      console.log('error from payment verification =====  ', error)
+      return res.status(400).json({message: "Server Error! Try again later"})
+    }
+};
+
+
+module.exports = {googleLogin, getProfile, login, signup, makePayment, verifyPayment, updateToken}

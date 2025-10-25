@@ -61,7 +61,7 @@ const UserContext = ({children}) => {
      })
 
      getProfile();
-  },[token])
+  },[token, updationOccur])
 
   
   //-------- problem related stuff -----
@@ -122,10 +122,28 @@ const UserContext = ({children}) => {
   
       fetchAllProblems();
   }, [currentUser, updationOccur])
+
+  const updateTokenCredit = async(token)=>{
+      const body = {
+        creditBalance : token,
+        email: currentUser.email
+      }
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/user/update-token`, {
+        method: "POST",
+        headers: {
+          'Authorization': token,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      })
+
+      const data = await response.json();
+      console.log('token upation is ', data)
+  }
   
   return (
      <userDataContext.Provider value={{isLoggedIn, setCurrentUser, currentUser, setToken, token, allProblems, logOut, 
-        setUpdationOccur, EasyProblemCount, MediumProblemCount, HardProblemCount, EasySolvedProblemCount, 
+        setUpdationOccur, updateTokenCredit, EasyProblemCount, MediumProblemCount, HardProblemCount, EasySolvedProblemCount, 
         MediumSolvedProblemCount, HardSolvedProblemCount, totalSolvedProblemsCount : EasySolvedProblemCount + MediumSolvedProblemCount
          + HardSolvedProblemCount, isModalOpen, setIsModalOpen }}>
            {children}

@@ -18,6 +18,10 @@ const userSchema = new mongoose.Schema({
     graduationYear: {
         type: String,
     },
+    creditBalance : {
+        type: Number,
+        default: 5,
+    },
     problemsSolved: {
         type: [{
             problem:{

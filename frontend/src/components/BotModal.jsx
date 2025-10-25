@@ -1,5 +1,7 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useContext } from 'react';
 import Modal from 'react-modal';
+import { userDataContext } from '../store/UserContext';
+import { useNavigate } from 'react-router-dom';
 
 Modal.setAppElement("#root");
 
@@ -16,6 +18,8 @@ const BotModal = ({ url }) => {
   const [dragging, setDragging] = useState(false);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [position, setPosition] = useState({ x: 0, y: 0 });
+  const { updateTokenCredit, currentUser, setUpdationOccur } = useContext(userDataContext);
+  const navigate = useNavigate();
 
   const scrollToBottom = () => messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
 
@@ -57,6 +61,10 @@ const BotModal = ({ url }) => {
     const thinkingMessage = { sender: "bot", text: "💭 Bot is thinking..." };
     setMessages(prev => [...prev, thinkingMessage]);
 
+    if(currentUser.creditBalance == 0) {
+      navigate("/token-plans")
+    }
+
     try {
       const response = await fetch("http://localhost:8080/api/problem/get", {
         method: "POST",
@@ -64,6 +72,9 @@ const BotModal = ({ url }) => {
         body: JSON.stringify({ url: String(url), query })
       });
       const data = await response.json();
+      console.log('credit balance in user is ', currentUser.creditBalance);
+      updateTokenCredit(currentUser.creditBalance - 1);
+      setUpdationOccur(prev => !prev);
 
       setMessages(prev => prev.map(msg => msg === thinkingMessage ? { sender: "bot", text: data } : msg));
     } catch (err) {

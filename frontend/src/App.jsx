@@ -9,6 +9,8 @@ import Profile from './components/Profile'
 import NewProblem from './components/NewProblem'
 import LoginPage from './common/LoginPage'
 import { Toaster } from 'react-hot-toast'
+import Payment from './components/Payment'
+import TokenPlan from './components/TokenPlan'
 
 const App = () => {
   return (
@@ -23,6 +25,8 @@ const App = () => {
           <Route element={<Profile/>} path='/profile'/> 
           <Route element={<NewProblem/>} path='/add'/> 
           <Route element={<LoginPage/>} path='/login'/> 
+          <Route element={<Payment/>} path='/payment'/> 
+          <Route element={<TokenPlan/>} path='/token-plans'/> 
        </Routes>
       </>
   )

@@ -124,6 +124,11 @@ const Navbar = () => {
                 {/* User/Login */}
                 <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                   {isLoggedIn ? (
+                  <>
+                    <div className="text-white font-semibold bg-gradient-to-r from-purple-700 to-indigo-600 px-4 py-1 rounded-full">
+                      Tokens: {currentUser.creditBalance} 💰
+                   </div>
+
                     <Menu as="div" className="relative ml-3">
                       <Menu.Button className="flex rounded-full bg-gradient-to-r from-purple-700 to-indigo-600 text-white h-10 w-10 items-center justify-center font-bold">{nameFirstLetter}</Menu.Button>
                       <Menu.Items className="absolute right-0 mt-2 w-48 rounded-2xl bg-gray-800/90 backdrop-blur-md shadow-xl border border-purple-400 py-1">
@@ -147,9 +152,19 @@ const Navbar = () => {
                             </button>
                           )}
                         </Menu.Item>
+                         <Menu.Item>
+                          {({ active }) => (
+                            <Link 
+                              to={'/token-plans'}
+                              className={`w-full text-left block px-4 py-2 text-sm text-white ${active && 'bg-gradient-to-r from-purple-600 to-indigo-500'}`}
+                            >
+                              Pricing
+                            </Link>
+                          )}
+                        </Menu.Item>
                       </Menu.Items>
                     </Menu>
-                  ) : (
+                  </>) : (
                     <button
                       onClick={() => setIsModalOpen(true)}
                       className="bg-gradient-to-r from-purple-600 to-indigo-500 hover:from-pink-500 hover:to-red-500 text-white px-4 py-2 rounded-full font-semibold shadow-lg transition transform duration-300"

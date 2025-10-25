@@ -9,5 +9,8 @@ router.post('/signup', validate(signupSchema), authController.signup)
 router.post('/login', validate(loginSchema), authController.login)
 router.post('/google-login', authController.googleLogin) 
 router.get('/get-profile', combinedAuthMiddleware, authController.getProfile)
+router.post('/make-payment',  authController.makePayment)
+router.post('/payment/verfiy',  authController.verifyPayment)
+router.post('/update-token',  authController.updateToken)
 
 module.exports = router;
