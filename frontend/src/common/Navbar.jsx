@@ -131,7 +131,7 @@ const Navbar = () => {
 
                     <Menu as="div" className="relative ml-3">
                       <Menu.Button className="flex rounded-full bg-gradient-to-r from-purple-700 to-indigo-600 text-white h-10 w-10 items-center justify-center font-bold">{nameFirstLetter}</Menu.Button>
-                      <Menu.Items className="absolute right-0 mt-2 w-48 rounded-2xl bg-gray-800/90 backdrop-blur-md shadow-xl border border-purple-400 py-1">
+                      <Menu.Items className="absolute right-0 mt-2 w-48 rounded-2xl bg-gray-800/90 backdrop-blur-md shadow-xl border border-purple-400 py-0.5 overflow-hidden">
                         <Menu.Item>
                           {({ active }) => (
                             <Link
