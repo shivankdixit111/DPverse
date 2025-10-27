@@ -3,7 +3,7 @@ import Topic from './Topic';
 import { userDataContext } from '../store/UserContext';
 import Loader from '../common/Loader';
 
-const topics = ["DP on Index", "DP on Subsequences", "Bitmask DP", "Range DP", "Digit DP", "Game DP", "DP on Grids", "Re-rooting Tree DP", "DP on Trie", "Backtrack & Print"];
+const topics = ["DP on Index", "DP on Subsequences", "Bitmask DP", "Range DP", "Digit DP", "Game DP", "DP on Grids", "Re-rooting Tree DP", "DP on Trie", "DP Optimization (Binary Search & Heaps)", "Backtrack & Print"];
 
 const Topics = () => {
   const {
