@@ -12,7 +12,7 @@ console.log('frontend url ', process.env.FRONTEND_URL)
 
 const corsOptions = {
     origin: process.env.FRONTEND_URL,
-    origin: '*',
+    // origin: '*',
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true 
 }
