@@ -7,7 +7,7 @@ router.post('/create-problem', combinedAuthMiddleware, problemController.createP
 router.post('/get-all-problems', combinedAuthMiddleware, problemController.getAllProblems)
 router.get('/get-all-problems2', combinedAuthMiddleware, problemController.getAllProblems2)
 router.post('/update', combinedAuthMiddleware, problemController.updateProblem)
-router.get('/leaderboard', problemController.displayLeaderBoard)
+router.post('/leaderboard', problemController.displayLeaderBoard)
 router.post('/get', problemController.getAIAnswer)
 
 module.exports = router;

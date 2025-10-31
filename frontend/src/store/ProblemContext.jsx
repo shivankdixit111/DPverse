@@ -1,50 +1,63 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { userDataContext } from './UserContext';
 
 export const problemDataContext = createContext();
 
-const ProblemContext = ({children}) => {
-  const [leaderBoardData, setLeaderBoardData] = useState([])
-  const [currentUserRank, setCurrentUserRank] = useState(0);
-  const {token, currentUser} = useContext(userDataContext)
-  
-  useEffect(()=> {
-     const fetchLeaderBoardData = async()=> {
-         try{
-           const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/problem/leaderboard`, {
-             method: "GET",
-             headers: {
-               'Authorization': token,
-             }
-           })
+const ProblemContext = ({ children }) => {
+  const [leaderBoardData, setLeaderBoardData] = useState([]);
+  const [currentUserRank, setCurrentUserRank] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-           const data = await response.json();
-           setLeaderBoardData(data);
- 
+  const { token, currentUser } = useContext(userDataContext);
 
-           for(let user of leaderBoardData) { 
-             if(user.email === currentUser.email) {
-                setCurrentUserRank(user.rank)
-                
-                console.log('match found ', user)
-                break;
-             }
-            }
- 
-           console.log(data)
-         } catch(error) {
-           console.log(error)
-         }
-     }
+  const fetchLeaderBoardData = async (page = 1) => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/problem/leaderboard`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token,
+        },
+        body: JSON.stringify({ page }),
+      });
 
-     fetchLeaderBoardData();
-  },[currentUser])
+      const data = await response.json();
+
+      console.log('request to leaderboard ', data)
+
+      if (data.success) {
+        setLeaderBoardData(data.users || []);
+        setTotalPages(data.totalPages || 1);
+        setCurrentPage(data.currentPage || 1);
+
+        // find current user’s rank
+        const found = data.users.find(user => user.email === currentUser.email);
+        if (found) setCurrentUserRank(found);
+      }
+    } catch (error) {
+      console.error('Error fetching leaderboard:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (currentUser) fetchLeaderBoardData(1);
+  }, [currentUser]);
 
   return (
-     <problemDataContext.Provider value={{ currentUserRank, leaderBoardData }}>
-        {children}
-     </problemDataContext.Provider>
-  )
-}
+    <problemDataContext.Provider
+      value={{
+        currentUserRank,
+        leaderBoardData,
+        currentPage,
+        totalPages,
+        setCurrentPage,
+        fetchLeaderBoardData,
+      }}
+    >
+      {children}
+    </problemDataContext.Provider>
+  );
+};
 
-export default ProblemContext
+export default ProblemContext;

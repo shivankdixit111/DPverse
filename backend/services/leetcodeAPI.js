@@ -1,6 +1,4 @@
-const puppeteer = require('puppeteer'); 
-
-async function getScrappedData(slug) {
+async function getProblemData(slug) {
     const response = await fetch("https://leetcode.com/graphql", {
         method: "POST",
         headers: {
@@ -21,5 +19,5 @@ async function getScrappedData(slug) {
     return data;
 }
 
-module.exports = { getScrappedData };
+module.exports = { getProblemData};
 

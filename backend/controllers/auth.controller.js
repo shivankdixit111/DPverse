@@ -80,7 +80,7 @@ const getProfile = async(req, res)=> {
       allProblems.map(async(problem)=> {
         const p = problem;
 
-        const problemExist =  user.problemsSolved.find((p)=> p.problem.toString() === problem._id.toString());
+        const problemExist =  user?.problemsSolved.find((p)=> p.problem.toString() === problem._id.toString());
         if(!problemExist) {
             user.problemsSolved.push({problem: problem._id, status: false, solvedAt: null, points: 0})
         }

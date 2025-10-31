@@ -2,7 +2,7 @@ const {OpenAI} = require('@langchain/openai')
 const { ChatPromptTemplate } = require('@langchain/core/prompts')
 const { LLMChain  } = require('langchain/chains')
 const dotenv = require('dotenv');
-const { getScrappedData } = require('./scraper');
+const { getScrappedData } = require('./leetcodeAPI');
 dotenv.config(); 
 
 async function getLLMAnswer({question, query}) {

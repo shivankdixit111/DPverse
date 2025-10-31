@@ -2,7 +2,7 @@ const { text } = require("express");
 const Problem = require("../models/problem.mode");
 const User = require("../models/user.model");
 const { getLLMAnswer } = require("../services/langchain");
-const { getScrappedData } = require('../services/scraper')
+const { getPr, getProblemDataoblemData } = require('../services/leetcodeAPI')
 const cheerio = require('cheerio')
 
 const createProblem = async(req, res)=>{
@@ -35,9 +35,16 @@ const getAllProblems = async(req, res)=>{
         // console.log(userId) 
         const user = await User.findById(userId).populate('problemsSolved.problem'); //populate it to get the all details of inner problem
 
-        user.problemsSolved = await user.problemsSolved.filter((p)=> p.problem !== null) 
+        user.problemsSolved = await user.problemsSolved.filter((p)=> p.problem !== null)  
 
-        const problemIds = await user.problemsSolved.map((p)=> p.problem._id)
+        const difficultyOrder = {
+          "Easy": 1,
+          "Medium": 2,
+          "Hard": 3,
+        }
+        user.problemsSolved.sort((a,b)=> {
+         return difficultyOrder[a.problem.difficulty] - difficultyOrder[b.problem.difficulty];
+        })
  
         await user.save();
 
@@ -77,7 +84,7 @@ const getAllProblems2 = async(req, res)=>{
         //check if for user's problemsSolved array is the problem present using find() method
 
         const problemExist = await existingUser.problemsSolved.find((p) => p.problem.toString() === problem_id) 
-        let score = (difficulty === "Easy" ? 2 : (difficulty === "Medium") ? 4 : 6)
+        let score = (difficulty === "Easy" ? 2 : (difficulty === "Medium") ? 4 : 8)
         if(!problemExist) {
             existingUser.problemsSolved.push({
                problem: problem_id,
@@ -100,38 +107,77 @@ const getAllProblems2 = async(req, res)=>{
     }
  }
 
- const displayLeaderBoard = async(req, res)=>{
-    try{
-      const leaderboard = await User.aggregate([
-         { $unwind : '$problemsSolved'}, //unwind each problem seperately
-         { $match: {'problemsSolved.status': true}},
-         {
-           $group: {
-              _id: '$_id',  //group documents by User (_id)
-              name: {$first: '$name'}, // Retrieves the namefield from the first document in each group. Since all documents in a group represent the same user, this effectively captures the user's name.
-              email: {$first: '$email'},
-              totalPoints: {$sum: '$problemsSolved.points'},
-              problemsSolvedCount: {$sum: 1}  // Counting the number of solved problems
-           }
-         },
-         { $sort: {problemsSolvedCount: -1} },
+const getLevelByPoints = (points) => {
+  if (points < 40) return "Newbie";
+  if (points < 100) return "Specialist";
+  if (points < 200) return "Expert";
+  if (points < 300) return "Candidate Master";
+  if (points < 400) return "Master";
+  return "GrandMaster";
+};
 
-         //asigning rank
-         {
-            $setWindowFields : {
-               sortBy: { problemsSolvedCount : -1},
-               output: {
-                  rank: { $denseRank: {} }
-               }
-            }
-         }
-      ])
+const displayLeaderBoard = async (req, res) => {
+  try {
+    const pageSize = 5;
+    const page = parseInt(req.body.page) || 1;
+    const skip = (page - 1) * pageSize;
 
-      return res.status(200).json(leaderboard)
-    } catch(error) {
-      console.log(error)
-    }
-}
+    // Stage 1: Aggregate total points & problems solved
+    const aggregated = await User.aggregate([
+      { $unwind: "$problemsSolved" },
+      { $match: { "problemsSolved.status": true } },
+      {
+        $group: {
+          _id: "$_id",
+          name: { $first: "$name" },
+          email: { $first: "$email" },
+          totalPoints: { $sum: "$problemsSolved.points" },
+          problemsSolvedCount: { $sum: 1 },
+        },
+      },
+      // Main sort
+      { $sort: { totalPoints: -1, problemsSolvedCount: -1 } },
+      // $denseRank requires a single key in sortBy
+      {
+        $setWindowFields: {
+          sortBy: { totalPoints: -1 },
+          output: { rank: { $denseRank: {} } },
+        },
+      },
+      { $skip: skip },
+      { $limit: pageSize },
+    ]);
+
+    // Stage 2: Compute user level on server side
+    const leaderboardWithLevel = aggregated.map((user) => ({
+      ...user,
+      level: getLevelByPoints(user.totalPoints),
+    }));
+
+    // Stage 3: Count total unique users who solved problems
+    const totalUsers = await User.aggregate([
+      { $unwind: "$problemsSolved" },
+      { $match: { "problemsSolved.status": true } },
+      { $group: { _id: "$_id" } },
+      { $count: "count" },
+    ]);
+
+    const totalCount = totalUsers[0]?.count || 0;
+    const totalPages = Math.ceil(totalCount / pageSize);
+
+    return res.status(200).json({
+      success: true,
+      currentPage: page,
+      totalPages,
+      users: leaderboardWithLevel,
+    });
+  } catch (error) {
+    console.error("Leaderboard error:", error);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+
 
 let storedProblem = "";
 const getAIAnswer = async(req, res)=>{
@@ -144,7 +190,7 @@ const getAIAnswer = async(req, res)=>{
       let aiResponse = "";
      
       // if(storedProblem == "") {
-         const problemStatement = await getScrappedData(slug);
+         const problemStatement = await getProblemData(slug);
          const title = problemStatement.data.question.title;
          const html = problemStatement.data.question.content;
          const d = cheerio.load(html)
