@@ -115,52 +115,54 @@ const getLevelByPoints = (points) => {
   if (points < 400) return "Master";
   return "GrandMaster";
 };
-
 const displayLeaderBoard = async (req, res) => {
   try {
     const pageSize = 5;
     const page = parseInt(req.body.page) || 1;
     const skip = (page - 1) * pageSize;
 
-    // Stage 1: Aggregate total points & problems solved
+    // stage 1
     const aggregated = await User.aggregate([
-      { $unwind: "$problemsSolved" },
-      { $match: { "problemsSolved.status": true } },
+      {"$unwind": "$problemsSolved"}, //seperate the problems solved array's values
+      {"$match" : {"problemsSolved.status" : true}},
       {
-        $group: {
+        "$group": {
           _id: "$_id",
-          name: { $first: "$name" },
-          email: { $first: "$email" },
-          totalPoints: { $sum: "$problemsSolved.points" },
-          problemsSolvedCount: { $sum: 1 },
-        },
+          email: {"$first": "$email"},
+          name : {"$first": "$name"},
+          problemsSolvedCount: {"$sum": 1},
+          totalPoints: {"$sum": "$problemsSolved.points"}
+        }
       },
       // Main sort
-      { $sort: { totalPoints: -1, problemsSolvedCount: -1 } },
-      // $denseRank requires a single key in sortBy
+      {"$sort" : {problemsSolvedCount: -1, totalPoints: -1}},
+      // Calculate the rank 
       {
-        $setWindowFields: {
-          sortBy: { totalPoints: -1 },
-          output: { rank: { $denseRank: {} } },
-        },
+        "$setWindowFields": {
+          sortBy: {totalPoints : -1},
+          output: { rank : { $denseRank : {} }}
+        }
       },
-      { $skip: skip },
-      { $limit: pageSize },
-    ]);
+      {$skip: skip},
+      {$limit : pageSize}
+    ])
+
+    console.log(aggregated) 
 
     // Stage 2: Compute user level on server side
-    const leaderboardWithLevel = aggregated.map((user) => ({
-      ...user,
-      level: getLevelByPoints(user.totalPoints),
-    }));
+    const leaderboardWithLevel = aggregated.map((user) => (
+      {...user, level: getLevelByPoints(user.totalPoints)}
+    ))
 
     // Stage 3: Count total unique users who solved problems
     const totalUsers = await User.aggregate([
-      { $unwind: "$problemsSolved" },
-      { $match: { "problemsSolved.status": true } },
-      { $group: { _id: "$_id" } },
-      { $count: "count" },
-    ]);
+        { "$unwind": "$problemsSolved" },
+        { "$match": { "problemsSolved.status" : true }},
+        { "$group": {_id: "$_id"}},
+        { "$count": "count" }
+    ]) 
+    
+    console.log('total users are --->> ', totalUsers)
 
     const totalCount = totalUsers[0]?.count || 0;
     const totalPages = Math.ceil(totalCount / pageSize);
@@ -175,8 +177,7 @@ const displayLeaderBoard = async (req, res) => {
     console.error("Leaderboard error:", error);
     return res.status(500).json({ success: false, message: "Server error" });
   }
-};
-
+}; 
 
 
 let storedProblem = "";

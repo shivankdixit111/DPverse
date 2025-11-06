@@ -22,6 +22,7 @@ const UserContext = ({children}) => {
   const[solvedProblemCount, setSolvedProblemCount] = useState(0);
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [updationOccur, setUpdationOccur] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -145,7 +146,7 @@ const UserContext = ({children}) => {
      <userDataContext.Provider value={{isLoggedIn, setCurrentUser, currentUser, setToken, token, allProblems, logOut, 
         setUpdationOccur, updateTokenCredit, EasyProblemCount, MediumProblemCount, HardProblemCount, EasySolvedProblemCount, 
         MediumSolvedProblemCount, HardSolvedProblemCount, totalSolvedProblemsCount : EasySolvedProblemCount + MediumSolvedProblemCount
-         + HardSolvedProblemCount, isModalOpen, setIsModalOpen }}>
+         + HardSolvedProblemCount, isModalOpen, setIsModalOpen, loading, setLoading }}>
            {children}
      </userDataContext.Provider>
   )

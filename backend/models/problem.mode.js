@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 const problemSchema = new mongoose.Schema({
     form: {
         type: String,

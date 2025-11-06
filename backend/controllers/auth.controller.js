@@ -70,7 +70,7 @@ const getProfile = async(req, res)=> {
       let user;
       if(req.authType === 'firebase') {  //firebase token verified
         const firebaseUser = req.user;   
-         user = await User.findOne({uid: firebaseUser.uid}) 
+        user = await User.findOne({uid: firebaseUser.uid}) 
 
       } else { //jwt token verified
         user = req.user;  

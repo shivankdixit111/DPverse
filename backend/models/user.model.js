@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema({
                 ref: 'Problem'
             },
             status: { 
-                type:Boolean,
+                type : Boolean,
                 default: false
             },
             solvedAt: {

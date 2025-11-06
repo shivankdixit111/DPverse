@@ -10,6 +10,7 @@ import { FcGoogle } from "react-icons/fc";
 import LoginPage from './LoginPage';
 import SignUp from './SignUp';
 import toast from 'react-hot-toast';
+import Loader from './Loader';
 
 let navigation = [
   { name: 'Home', href: '/', current: true },
@@ -24,8 +25,9 @@ function classNames(...classes) {
 const Navbar = () => {
   const navigate = useNavigate();
   const path = useLocation();
-  const { setCurrentUser, currentUser, setToken, logOut, isLoggedIn, isModalOpen, setIsModalOpen } = useContext(userDataContext);
-  const [mode, setMode] = useState('login');
+  const { setCurrentUser, currentUser, setToken, logOut, isLoggedIn, isModalOpen, setIsModalOpen, loading, setLoading } = useContext(userDataContext);
+  const [mode, setMode] = useState('login'); 
+  // const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleGoogleLogin = async () => {
     try {
@@ -45,7 +47,8 @@ const Navbar = () => {
 
       if (response.ok) {
         setCurrentUser(data);
-        setIsModalOpen(false);
+        setIsModalOpen(false); 
+        
         toast.success('Login successful!');
         navigate('/');
       } else {
@@ -60,6 +63,7 @@ const Navbar = () => {
   useEffect(() => {
     navigation.forEach(nav => nav.href === path.pathname ? nav.current = true : nav.current = false);
   }, [path.pathname]);
+ 
 
   const nameFirstLetter = currentUser?.name?.[0]?.toUpperCase() || "";
 
@@ -167,7 +171,7 @@ const Navbar = () => {
                   </>) : (
                     <button
                       onClick={() => setIsModalOpen(true)}
-                      className="bg-gradient-to-r from-purple-600 to-indigo-500 hover:from-pink-500 hover:to-red-500 text-white px-4 py-2 rounded-full font-semibold shadow-lg transition transform duration-300"
+                      className="bg-gradient-to-r from-purple-600 to-indigo-500 hover:from-pink-500 hover:to-red-500 text-white px-4 py-2 rounded-full font-semibold shadow-lg transition transform duration-300 cursor-pointer"
                     >
                       Login
                     </button>
