@@ -26,16 +26,18 @@ const signup = async(req, res)=> {
 }
 
 const login = async(req, res)=> {
-  try{
+  try{ 
     const {email, password} = req.body;
     const userExist = await User.findOne({email})
+
+    console.log(email, password)
     if(!userExist) { 
       return res.status(400).json({message: "Invalid credentials!"});
     }
     const isPasswordValid = await bcrypt.compare(password, userExist.password);
     if(!isPasswordValid) {
       return res.status(400).json({message: "Invalid credentials!"})
-    }
+    } 
 
     const token = jwt.sign(
       {id: userExist._id},
@@ -46,8 +48,8 @@ const login = async(req, res)=> {
     )
 
     return res.status(200).json({user: userExist, token});
-  } catch(error) {
-    return res.status(400).json({message: "Internal server error in login !!!"})
+  } catch(error) { 
+    return res.status(400).json({message: "Internal server error in login2 !!!"})
   }
 }
 
