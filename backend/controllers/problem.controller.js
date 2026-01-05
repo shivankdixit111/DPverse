@@ -186,22 +186,15 @@ const getAIAnswer = async(req, res)=>{
       const {url, query} = req.body;
       const slug = url.split("/")[4];
       storedProblem = slug;
-      console.log('url is ', url)
-      // console.log("slug is ", slug)
+      console.log('url is ', url) 
       let aiResponse = "";
-     
-      // if(storedProblem == "") {
+      
          const problemStatement = await getProblemData(slug);
          const title = problemStatement.data.question.title;
          const html = problemStatement.data.question.content;
-         const d = cheerio.load(html)
-         // console.log('d is ', d)
-         const textContent = d.text().trim();
-         //   console.log('title is ', title, 'problem statement is - ', textContent)
-         // aiResponse   = await getLLMAnswer(problemStatement); 
-      // }  
-
-      // console.log('problem name is ', textContent)
+         const d = cheerio.load(html) 
+         const textContent = d.text().trim(); 
+ 
 
       aiResponse  = await getLLMAnswer({question : textContent, query}); 
 
