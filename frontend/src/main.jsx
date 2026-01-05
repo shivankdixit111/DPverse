@@ -16,16 +16,14 @@ createRoot(document.getElementById('root')).render(
       redirect_uri: window.location.origin
     }}
   >
-    <BrowserRouter>
-      {/* <Toaster  position="top-center" reverseOrder={false}> */}
+    <BrowserRouter> 
         <UserContext>
           <ProblemContext>
             <StrictMode>
               <App />
             </StrictMode>
           </ProblemContext>
-        </UserContext>
-      {/* </Toaster> */}
+        </UserContext> 
     </BrowserRouter>
   </Auth0Provider>
   
