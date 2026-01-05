@@ -11,8 +11,7 @@ dotenv.config({ path: path.resolve(__dirname, '../.env') });
 console.log('frontend url ', process.env.FRONTEND_URL)
 
 const corsOptions = {
-    origin: process.env.FRONTEND_URL,
-    // origin: '*',
+    origin: process.env.FRONTEND_URL, 
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true 
 }
