@@ -65,6 +65,11 @@ const Home = () => {
         <p className='font-medium text-center'>Made with ❤️ by Shivank | DPverse © 2025</p>
       </footer>
 
+      {/* Hidden images for SEO indexing */}
+      <img src='/images/fib-table.png' alt='Fibonacci DP Table Example' className='hidden'/>
+      <img src='/images/knapsack-grid.png' alt='0/1 Knapsack DP Grid Example' className='hidden'/>
+      <img src='/images/lcs-arrows.png' alt='Longest Common Subsequence DP Arrows Example' className='hidden'/>
+
     </div>
   )
 }
