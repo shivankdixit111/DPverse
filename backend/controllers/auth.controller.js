@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
 const dotenv = require('dotenv')
+const admin = require('../firebase')
 dotenv.config();
 
 const signup = async(req, res)=> {
@@ -53,19 +54,40 @@ const login = async(req, res)=> {
   }
 }
 
-const googleLogin = async(req, res)=> {
-    try{
-      const {uid, name, email} = req.body;
-      const userExist = await User.findOne({uid})
-      if(!userExist) {
-         const newUser = await User.create({uid, name, email})
-         return res.status(200).json(newUser);
-      }
-      return res.status(200).json(userExist);
-    } catch(error) {
-      return res.status(400).json({message: "Internal server error in login !!!"})
+const googleLogin = async (req, res) => {
+  try {
+    console.log('req.body is ', req.body)
+    const { idToken } = req.body;
+
+    console.log('id token is ', idToken)
+
+    // Verify Firebase token
+    const decoded = await admin.auth().verifyIdToken(idToken);
+
+    // Find or create user
+    let user = await User.findOne({ email: decoded.email });
+
+    if (!user) {
+      user = await User.create({
+        name: decoded.name,
+        email: decoded.email,
+        uid: decoded.uid
+      });
     }
-}
+
+    // Generate JWT
+    const token = jwt.sign(
+      { id: user._id },
+      process.env.SECRET_KEY,
+      { expiresIn: '7d' }
+    );
+
+    return res.status(200).json({ token, user });
+
+  } catch (error) {
+    return res.status(401).json({ message: "Invalid Firebase token" });
+  }
+};
 
 const getProfile = async(req, res)=> {
     try{
@@ -115,8 +137,7 @@ const updateToken = async(req, res)=> {
 const makePayment = async(req, res)=> {
     try {
       const {amount, tokens} = req.body;
-
-      console.log('tokens is ', tokens)
+ 
 
       const options = {
         amount: amount*100, //convert to paise
@@ -140,8 +161,7 @@ const verifyPayment = async(req, res)=> {
 
       const expectedSign = crypto.createHmac("sha256", process.env.RAZORPAY_KEY_SECRET).update(sign).digest('hex')
 
-      console.log(razorpay_order_id, razorpay_payment_id, razorpay_signature, email, tokens, "expected---- ", expectedSign)
-
+ 
       if(expectedSign == razorpay_signature) {
         const user = await User.updateOne({email}, {$inc: {creditBalance: tokens}}, {new: true});
         console.log('user is ', user)

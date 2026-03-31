@@ -3,13 +3,15 @@ import Modal from 'react-modal';
 import { userDataContext } from '../store/UserContext';
 import { useNavigate } from 'react-router-dom';
 
+
+
 Modal.setAppElement("#root");
 
 const BotModal = ({ url }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([
-    { sender: "bot", text: '👋 Hello! I’m your AI Assistant. Want to see the solution for this problem?' }
+    { sender: "bot", text: '👋 Hello! I\'m your DSA Mentor for DPverse!\n\nI can help you with:\n• Hints to solve the problem\n• Edge cases to consider\n• Full solution (when you\'re ready)\n• Time & space complexity analysis\n\nWhat would you like to know?' }
   ]);
   const [loading, setLoading] = useState(false);
 
@@ -71,8 +73,7 @@ const BotModal = ({ url }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url: String(url), query })
       });
-      const data = await response.json();
-      console.log('credit balance in user is ', currentUser.creditBalance);
+      const data = await response.json(); 
       updateTokenCredit(currentUser.creditBalance - 1);
       setUpdationOccur(prev => !prev);
 

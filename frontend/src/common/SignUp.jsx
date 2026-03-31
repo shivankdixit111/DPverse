@@ -25,8 +25,7 @@ const SignUp = (props) => {
     }
 
     const handleSubmit = async(e)=> {
-          e.preventDefault();
-          console.log(User)
+          e.preventDefault(); 
 
           const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/user/signup`, {
             method: "POST",
@@ -37,8 +36,6 @@ const SignUp = (props) => {
           });
         
          const data = await response.json();
-
-         console.log(data)
 
          if(response.ok) {
             setCurrentUser(data);  

@@ -1,34 +1,30 @@
-const admin = require('../firebase')
 const jwt = require('jsonwebtoken');
 const User = require('../models/user.model');
 
-const combinedAuthMiddleware = async(req, res, next)=> {
-      const token = req.headers.authorization; 
-      if(!token) {
-        return res.status(400).json({message: "Unauthorized! Please try again later."})
-      }
+const authMiddleware = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
 
-      try{
-        // first try to verify as firebase token 
-        const decodedUser = await admin.auth().verifyIdToken(token);
-        console.log('decoded user is -- ', decodedUser)
-        req.user = decodedUser;
-        req.authType = 'firebase'
-        return next();
-      } catch(error) {
-        //if firebase token fails then verify it as a JWT token
-          try{
-            const decodedUser = await jwt.verify(token, process.env.SECRET_KEY);
-            const user = await User.findById(decodedUser.id)
-         
-            req.user = user;
-            req.authType = 'jwt'
-            return next();
-          } catch(error) {
-              console.log(error)
-              return res.status(400).json({message: "Internal server error in verification"})
-          } 
-      } 
-} 
+  if (!authHeader) {
+    return res.status(401).json({ message: "No token provided" });
+  }
 
-module.exports =  combinedAuthMiddleware 
+  const token = authHeader.split(' ')[1];
+  console.log('token in middleware is ', token)
+
+  try {
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+
+    const user = await User.findById(decoded.id);
+    if (!user) {
+      return res.status(401).json({ message: "User not found" });
+    }
+
+    req.user = user;
+    next();
+
+  } catch (error) {
+    return res.status(401).json({ message: "Invalid or expired token" });
+  }
+};
+
+module.exports = authMiddleware;

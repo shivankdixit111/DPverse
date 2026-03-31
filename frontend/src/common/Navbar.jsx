@@ -7,6 +7,7 @@ import { Disclosure, Menu } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { FcGoogle } from "react-icons/fc";
 
+
 import LoginPage from './LoginPage';
 import SignUp from './SignUp';
 import toast from 'react-hot-toast';
@@ -30,34 +31,37 @@ const Navbar = () => {
   // const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleGoogleLogin = async () => {
-    try {
-      const result = await signInWithPopup(auth, googleProvider);
-      const tokenId = await result.user.getIdToken();
-      setToken(tokenId);
+  try {
+    const result = await signInWithPopup(auth, googleProvider);
 
-      const body = { uid: result.user.uid, email: result.user.email, name: result.user.displayName };
+    // ✅ THIS is correct Firebase ID token
+    const firebaseToken = await result.user.getIdToken(); 
 
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/user/google-login`, {
-        method: "POST",
-        headers: { 'Content-Type': 'application/json', 'Authorization': tokenId },
-        body: JSON.stringify(body),
-      });
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/user/google-login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${firebaseToken}` // ✅ BEST PRACTICE
+      },
+      body: JSON.stringify({})
+    });
 
-      const data = await response.json();
+    const data = await response.json(); 
 
-      if (response.ok) {
-        setCurrentUser(data);
-        setIsModalOpen(false); 
-        
-        toast.success('Login successful!');
-        navigate('/');
-      } else {
-        toast.error('Internal server error');
-      }
-    } catch (err) {
-      console.error(err);
-      toast.error('Login failed!');
+    if (response.ok) {
+      setToken(`Bearer ${data.token}`); // ✅ JWT from backend
+      setCurrentUser(data.user);
+
+      setIsModalOpen(false);
+      toast.success("Login successful!");
+      navigate("/");
+    } else {
+      toast.error(data.message);
     }
+  } catch (err) {
+    console.error(err);
+    toast.error("Login failed!");
+  }
   };
 
   useEffect(() => {

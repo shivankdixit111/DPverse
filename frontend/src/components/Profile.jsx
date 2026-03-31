@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { userDataContext } from "../store/UserContext";
 import { problemDataContext } from "../store/ProblemContext";
 
+
 const Profile = () => {
   const { currentUser, logOut } = useContext(userDataContext);
   const { currentUserRank } = useContext(problemDataContext);

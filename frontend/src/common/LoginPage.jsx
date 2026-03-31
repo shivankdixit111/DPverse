@@ -7,7 +7,6 @@ import { HiOutlineMail } from "react-icons/hi";
 import { MdLockOutline } from "react-icons/md";
 import toast from 'react-hot-toast';
 
-
 const LoginPage = (props) => { 
     const {setCurrentUser, setToken} = useContext(userDataContext)
     const navigate = useNavigate();
@@ -24,8 +23,7 @@ const LoginPage = (props) => {
     }
 
     const handleSubmit = async(e)=> {
-         e.preventDefault();
-         console.log(User)
+         e.preventDefault(); 
          
          const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/user/login`, {
             method: "POST",
@@ -39,9 +37,8 @@ const LoginPage = (props) => {
 
          if(response.ok) {
             setCurrentUser(data.user);
-            setToken(data.token)
-
-            console.log('login user data is ', data)
+            setToken(`Bearer ${data.token}`)
+ 
             props.setIsModalOpen(false)
             toast.success('login successful')
             navigate('/')

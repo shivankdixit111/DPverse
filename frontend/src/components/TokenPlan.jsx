@@ -3,13 +3,13 @@ import { userDataContext } from '../store/UserContext';
 import toast from 'react-hot-toast';
 import Loader from '../common/Loader';
 
+
 export default function TokenPlan() {
   const { token, currentUser, setUpdationOccur, loading } = useContext(userDataContext);
   if(!currentUser.email) {
     return <Loader />
   }
-
-  console.log('email is ', currentUser.email)
+ 
 
   const plans = [
     {
@@ -49,9 +49,7 @@ export default function TokenPlan() {
         body: JSON.stringify({amount: plan.price, tokens: plan.tokens})
     })
 
-        const data = await response.json();
-        console.log('data is ', data)
-        console.log('razor id ', import.meta.env.VITE_RAZORPAY_KEY_ID)
+        const data = await response.json(); 
 
         const options = {
             key: import.meta.env.VITE_RAZORPAY_KEY_ID,
@@ -61,8 +59,7 @@ export default function TokenPlan() {
             name: "DP-Verse Premium",
             description: "Upgrade Subscription",
             handler: async function(response) {
-                alert("success")
-                console.log('payment response ------>>> ',response)
+                alert("success") 
                 const body = {
                     razorpay_order_id: response.razorpay_order_id,
                     razorpay_payment_id: response.razorpay_payment_id,

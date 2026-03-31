@@ -2,7 +2,7 @@ const { text } = require("express");
 const Problem = require("../models/problem.mode");
 const User = require("../models/user.model");
 const { getLLMAnswer } = require("../services/langchain");
-const { getPr, getProblemDataoblemData } = require('../services/leetcodeAPI')
+const { getProblemData } = require('../services/leetcodeAPI')
 const cheerio = require('cheerio')
 
 const createProblem = async(req, res)=>{
@@ -16,8 +16,7 @@ const createProblem = async(req, res)=>{
         return res.status(400).json({message: "Problem already exists.. Please try with different problem"})
       }
 
-      console.log(form, name, practiceLink, resourceLink, difficulty)
-
+ 
       const newProblem = await Problem.create({form, name, practiceLink, platform, resourceLink, videoLink, difficulty})
       return res.status(200).json(newProblem)
    } catch(error) {
@@ -32,7 +31,6 @@ const getAllProblems = async(req, res)=>{
         // console.log('req body is ---->>>>>>>> ', req.body)
         const {userId} = req.body;
 
-        // console.log(userId) 
         const user = await User.findById(userId).populate('problemsSolved.problem'); //populate it to get the all details of inner problem
 
         user.problemsSolved = await user.problemsSolved.filter((p)=> p.problem !== null)  
@@ -50,8 +48,7 @@ const getAllProblems = async(req, res)=>{
 
         const allProblems = user.problemsSolved;
 
-        // console.log(' --- ', allProblems) 
-       
+        
        return res.status(200).json(allProblems)
 
       return res.status(200).json({message: "ok"})
@@ -75,8 +72,7 @@ const getAllProblems2 = async(req, res)=>{
     try{
         const {user_id, problem_id, status, difficulty} = req.body;
 
-        console.log('-- ', user_id, problem_id, status)
-        const existingUser = await User.findOne({_id: user_id})
+         const existingUser = await User.findOne({_id: user_id})
         if(!existingUser) {
             return res.status(400).json({message: "User not found !"});
         }
@@ -162,8 +158,7 @@ const displayLeaderBoard = async (req, res) => {
         { "$count": "count" }
     ]) 
     
-    console.log('total users are --->> ', totalUsers)
-
+ 
     const totalCount = totalUsers[0]?.count || 0;
     const totalPages = Math.ceil(totalCount / pageSize);
 
@@ -198,8 +193,7 @@ const getAIAnswer = async(req, res)=>{
 
       aiResponse  = await getLLMAnswer({question : textContent, query}); 
 
-      console.log('AI Response is ------------- ', aiResponse)
-
+ 
       return res.status(200).json(aiResponse)
       
    } catch(error) {
