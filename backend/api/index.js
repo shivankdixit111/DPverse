@@ -5,7 +5,8 @@ const app = express();
 const dotenv = require('dotenv')
 const cors = require('cors'); 
 const authRoute = require('../routes/auth.route')
-const problemRoute = require('../routes/problem.route')
+const problemRoute = require('../routes/problem.route');  
+const Problem = require('../models/problem.model'); 
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 console.log('frontend url ', process.env.FRONTEND_URL)
@@ -18,7 +19,8 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json()); //parse the req.body data in json format
 
-connectToDB();
+connectToDB(); 
+
 
 //routes 
 app.use('/api/user', authRoute)

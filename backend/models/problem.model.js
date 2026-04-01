@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const problemSchema = new mongoose.Schema({
-    form: {
+    topic: {
         type: String,
         required: true
     },

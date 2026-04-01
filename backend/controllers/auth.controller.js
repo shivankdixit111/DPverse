@@ -1,5 +1,5 @@
 const { razorpayInstance } = require('../lib/razorpay');
-const Problem = require('../models/problem.mode');
+const Problem = require('../models/problem.model');
 const User = require('../models/user.model')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')

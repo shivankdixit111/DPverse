@@ -1,12 +1,38 @@
 import React, { useContext, useState } from 'react' 
 import { userDataContext } from '../store/UserContext';
 
-const forms = ["DP on Index", "DP on Subsequences", "Bitmask DP", "Range DP", "Digit DP", "Game DP", "DP on Grids", "Re-rooting Tree DP", "DP on Trie", "DP Optimization (Binary Search & Heaps)", "Backtrack & Print"];
+const topics = [
+  "DP - Index",
+  "DP - Subsequences",
+  "DP - Bitmask",
+  "DP - Range",
+  "DP - Digit",
+  "DP - Game",
+  "DP - Grid",
+
+  "Tree - Binary Lifting",
+  "Tree - Rerooting",
+  "Tree - LCA",
+
+  "Graph - DFS",
+  "Graph - BFS",
+  "Graph - Topological Sorting",
+  "Graph - DSU",
+  "Graph - Dijkstra",
+
+  "Binary Search",
+  "Backtracking",
+  "Greedy",
+
+  "String - Hashing",
+  "String - Z Algorithm",
+  "String - Manacher"
+]; 
 
 const NewProblem = () => {
     const {token} = useContext(userDataContext);   
     const [Problem, setProblem] = useState({
-        form: "",
+        topic: "",
         name: "",
         practiceLink: "",
         platform: "",
@@ -38,23 +64,23 @@ const NewProblem = () => {
 
   return (
     <>
-        {/* Problem Form Section */}
+        {/* Problem Topic Section */}
       <section id="add-problem" className='py-16 bg-yellow-400'>
         <div className='w-[80%] mx-auto'>
           <h2 className='text-3xl font-bold text-center mb-12 text-black'>Add New DP Problem</h2>
 
           <form onSubmit={handleSubmit} className='flex flex-col gap-6 max-w-2xl mx-auto'>
             <div className='flex flex-col'>
-              <label htmlFor="form" className='font-bold text-black mb-2'>Form</label>
+              <label htmlFor="topic" className='font-bold text-black mb-2'>Topic</label>
               <select 
                 onChange={handleChange} 
-                name="form" 
+                name="topic" 
                 className='border-black border-2 rounded-lg p-3 bg-white text-black focus:ring-2 focus:ring-yellow-500'
                 required
               > 
-                <option value="" disabled selected>Select the DP Form</option>
-                {forms.map((form, idx) => (
-                  <option key={idx} value={form}>{form}</option>
+                <option value="" disabled selected>Select the Topic</option>
+                {topics.map((topic, idx) => (
+                  <option key={idx} value={topic}>{topic}</option>
                 ))}
               </select>
             </div>

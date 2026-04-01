@@ -1,5 +1,5 @@
 const { text } = require("express");
-const Problem = require("../models/problem.mode");
+const Problem = require("../models/problem.model");
 const User = require("../models/user.model");
 const { getLLMAnswer } = require("../services/langchain");
 const { getProblemData } = require('../services/leetcodeAPI')
