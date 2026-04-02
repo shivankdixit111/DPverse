@@ -5,6 +5,7 @@ import Loader from '../common/Loader';
 
 const topics = [
   "DP - Index",
+  "DP - Strings",
   "DP - Subsequences",
   "DP - Bitmask",
   "DP - Range",

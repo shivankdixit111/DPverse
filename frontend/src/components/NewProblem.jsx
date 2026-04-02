@@ -3,6 +3,7 @@ import { userDataContext } from '../store/UserContext';
 
 const topics = [
   "DP - Index",
+  "DP - Strings",
   "DP - Subsequences",
   "DP - Bitmask",
   "DP - Range",
