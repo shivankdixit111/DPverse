@@ -7,7 +7,7 @@ const cheerio = require('cheerio')
 
 const createProblem = async(req, res)=>{
    try{
-      const {form, name, practiceLink, platform, resourceLink, videoLink, difficulty} = req.body;
+      const {topic, name, practiceLink, platform, resourceLink, videoLink, difficulty} = req.body;
       const problemExist = await Problem.findOne({practiceLink : practiceLink})
 
       console.log('existed problem ', problemExist)
@@ -17,7 +17,7 @@ const createProblem = async(req, res)=>{
       }
 
  
-      const newProblem = await Problem.create({form, name, practiceLink, platform, resourceLink, videoLink, difficulty})
+      const newProblem = await Problem.create({topic, name, practiceLink, platform, resourceLink, videoLink, difficulty})
       return res.status(200).json(newProblem)
    } catch(error) {
       console.log(error)
