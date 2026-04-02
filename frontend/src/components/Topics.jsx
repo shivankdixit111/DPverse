@@ -36,7 +36,7 @@ const topics = [
 ];
 
 const Topics = () => {
-  const {
+  let {
     allProblems,
     EasyProblemCount,
     MediumProblemCount,
@@ -50,19 +50,25 @@ const Topics = () => {
     currentUser
   } = useContext(userDataContext);
 
+  EasyProblemCount += 20;
+  MediumProblemCount += 35;
+  HardProblemCount += 18;
+
   let totalSolved = EasySolvedProblemCount + MediumSolvedProblemCount + HardSolvedProblemCount;
   let total = EasyProblemCount + MediumProblemCount + HardProblemCount;
   let percentage = Math.ceil((totalSolved / total) * 100);
 
   if (!isLoggedIn) setIsModalOpen(true);
   if (currentUser.length) setIsModalOpen(false);
-  if (allProblems.length === 0) return <Loader />;
+  // if (allProblems.length === 0) return <Loader />;
 
   const dpMap = new Map();
   allProblems.forEach(p => {
-    if (!dpMap.get(p.problem?.form)) dpMap.set(p.problem?.form, []);
-    dpMap.get(p.problem?.form).push(p);
+    if (!dpMap.get(p.problem?.topic)) dpMap.set(p.problem?.topic, []);
+    dpMap.get(p.problem?.topic).push(p);
   });
+
+  console.log(allProblems)
 
   return (
     <div className='flex flex-col min-h-screen bg-gray-900 text-gray-100 pt-6 md:pt-10'>

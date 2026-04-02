@@ -62,6 +62,7 @@ const NewProblem = () => {
         })
         const data = await response.json();
         if(response.ok) alert('problem created')
+        else alert(data.message)
         console.log('new problem is ', data)
     }
 

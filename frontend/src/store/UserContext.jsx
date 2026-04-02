@@ -11,15 +11,15 @@ const UserContext = ({children}) => {
   const [currentUser, setCurrentUser] = useState({});
   const [allProblems, setAllProblems] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
-  const[EasyProblemCount, setEasyProblemCount] = useState(0);
-  const[MediumProblemCount, setMediumProblemCount] = useState(0);
-  const[HardProblemCount, setHardProblemCount] = useState(0);
+  let [EasyProblemCount, setEasyProblemCount] = useState(0);
+  let [MediumProblemCount, setMediumProblemCount] = useState(0);
+  let [HardProblemCount, setHardProblemCount] = useState(0);
 
-  const[EasySolvedProblemCount, setEasySolvedProblemCount] = useState(0);
-  const[MediumSolvedProblemCount, setMediumSolvedProblemCount] = useState(0);
-  const[HardSolvedProblemCount, setHardSolvedProblemCount] = useState(0);
+  let [EasySolvedProblemCount, setEasySolvedProblemCount] = useState(0);
+  let [MediumSolvedProblemCount, setMediumSolvedProblemCount] = useState(0);
+  let [HardSolvedProblemCount, setHardSolvedProblemCount] = useState(0);
 
-  const[solvedProblemCount, setSolvedProblemCount] = useState(0);
+  let [solvedProblemCount, setSolvedProblemCount] = useState(0);
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [updationOccur, setUpdationOccur] = useState(0);
   const [loading, setLoading] = useState(false);
