@@ -12,15 +12,19 @@ const topics = [
   "DP - Game",
   "DP - Grid",
 
-  "Tree - Binary Lifting",
-  "Tree - Rerooting",
-  "Tree - LCA",
 
   "Graph - DFS",
   "Graph - BFS",
   "Graph - Topological Sorting",
   "Graph - DSU",
   "Graph - Dijkstra",
+  
+  "Tree - Binary Lifting",
+  "Tree - Rerooting",
+  "Tree - LCA",
+  "Tree - Segment Tree",
+  "Tree - Fenwick Tree",
+
 
   "Binary Search",
   "Backtracking",

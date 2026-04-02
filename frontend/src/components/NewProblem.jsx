@@ -10,15 +10,19 @@ const topics = [
   "DP - Game",
   "DP - Grid",
 
-  "Tree - Binary Lifting",
-  "Tree - Rerooting",
-  "Tree - LCA",
 
   "Graph - DFS",
   "Graph - BFS",
   "Graph - Topological Sorting",
   "Graph - DSU",
   "Graph - Dijkstra",
+  
+  "Tree - Binary Lifting",
+  "Tree - Rerooting",
+  "Tree - LCA",
+  "Tree - Segment Tree",
+  "Tree - Fenwick Tree",
+
 
   "Binary Search",
   "Backtracking",
@@ -27,7 +31,7 @@ const topics = [
   "String - Hashing",
   "String - Z Algorithm",
   "String - Manacher"
-]; 
+];
 
 const NewProblem = () => {
     const {token} = useContext(userDataContext);   
