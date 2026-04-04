@@ -164,7 +164,6 @@ const verifyPayment = async(req, res)=> {
  
       if(expectedSign == razorpay_signature) {
         const user = await User.updateOne({email}, {$inc: {creditBalance: tokens}}, {new: true});
-        console.log('user is ', user)
         return res.status(200).json("Payment is successful !")
       } 
       

@@ -29,7 +29,7 @@ const createProblem = async(req, res)=>{
 const getAllProblems = async(req, res)=>{
     try{
         // console.log('req body is ---->>>>>>>> ', req.body)
-        const {userId} = req.body;
+         const {userId} = req.body;
 
         const user = await User.findById(userId).populate('problemsSolved.problem'); //populate it to get the all details of inner problem
 
