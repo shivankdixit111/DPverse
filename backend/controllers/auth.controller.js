@@ -134,7 +134,7 @@ const updateToken = async(req, res)=> {
   }
 }
 
-const makePayment = async(req, res)=> {
+const createOrder = async(req, res)=> {
     try {
       const {amount, tokens} = req.body;
  
@@ -167,7 +167,7 @@ const verifyPayment = async(req, res)=> {
         return res.status(200).json("Payment is successful !")
       } 
       
-      return res.status(400).json("Payment is unsuccessful! Try again later"); 
+      return res.status(400).json("Payment unsuccessful! Try again later"); 
 
     } catch(error) {
       console.log('error from payment verification =====  ', error)
@@ -176,4 +176,4 @@ const verifyPayment = async(req, res)=> {
 };
 
 
-module.exports = {googleLogin, getProfile, login, signup, makePayment, verifyPayment, updateToken}
+module.exports = {googleLogin, getProfile, login, signup, createOrder, verifyPayment, updateToken}

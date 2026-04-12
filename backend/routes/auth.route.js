@@ -14,7 +14,7 @@ router.post('/google-login', authController.googleLogin);
 // 🔒 Protected routes → ONLY JWT
 router.get('/get-profile', authMiddleware, authController.getProfile);
 
-router.post('/make-payment', authController.makePayment);
+router.post('/create-order', authController.createOrder);
 router.post('/payment/verify', authController.verifyPayment);
 router.post('/update-token', authController.updateToken);
 

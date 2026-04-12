@@ -40,10 +40,9 @@ const Navbar = () => {
     const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/user/google-login`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${firebaseToken}` // ✅ BEST PRACTICE
+        "Content-Type": "application/json", 
       },
-      body: JSON.stringify({})
+      body: JSON.stringify({idToken : firebaseToken})
     });
 
     const data = await response.json(); 

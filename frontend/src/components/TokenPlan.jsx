@@ -9,7 +9,7 @@ export default function TokenPlan() {
   if(!currentUser.email) {
     return <Loader />
   }
- 
+
 
   const plans = [
     {
@@ -22,7 +22,7 @@ export default function TokenPlan() {
     },
     {
       id: 'pro',
-      price: 1,
+      price: 10,
       currency: '₹',
       tokens: 130,
       subtitle: 'Most popular',
@@ -30,9 +30,9 @@ export default function TokenPlan() {
     },
     {
       id: 'elite',
-      price: 50,
+      price: 20,
       currency: '₹',
-      tokens: 500,
+      tokens: 300,
       subtitle: 'Best value',
       highlight: false,
     },
@@ -40,7 +40,7 @@ export default function TokenPlan() {
 
   const handleBuy = async(plan) => {
     // placeholder: integrate payment flow here 
-    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/user/make-payment`, {
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/user/create-order`, {
         method: "POST",
         headers: {
             'Authorization': 'Bearer ' + token,
